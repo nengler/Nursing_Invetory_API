@@ -2,13 +2,10 @@ module Api
   module V1
     class ItemsController < ApplicationController
 
-      skip_before_action :require_login
-
       def index
         @items = Item.all
         render json: {status: 'SUCCESS', message: 'got items', data:@items},status: :ok
       end
-
       
       def new
         @item = Item.new
