@@ -2,6 +2,18 @@ module Api
   module V1
     class ItemsController < ApplicationController
 
+      skip_before_action :require_login
+
+      def items_by_category
+        @items = Item.where(category_id: params[:category_id])
+        render json: {status: 'SUCCESS', message: 'got items', data:@items},status: :ok
+      end
+
+      def item_by_name
+        @item = Item.where("name like ?", "%#{params[:name]}%")
+        render json: {status: 'SUCCESS', message: 'got item(s)', data:@item},status: :ok
+      end
+
       def index
         @items = Item.all
         render json: {status: 'SUCCESS', message: 'got items', data:@items},status: :ok
