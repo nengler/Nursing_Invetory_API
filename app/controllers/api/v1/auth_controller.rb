@@ -22,7 +22,6 @@ module Api
           render json: {errors: "no users logged in"}
         end
       end
-
     end
   end
 end
