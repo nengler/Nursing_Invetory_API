@@ -6,12 +6,9 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-25.times do 
-  Item.create(
-    name: Faker::Games::Pokemon.name,
-    description: Faker::Games::Fallout.quote,
-    count: Faker::Number.between(from: 0, to: 100),
-    barcode_id: Faker::Number.number(digits: 10),
-    category_id: Faker::Number.between(from: 1, to: 4)
+3.times do 
+  ScannedOut.create(
+    count: Faker::Number.between(from: 1, to: 15),
+    item_id: 38
   )
 end
