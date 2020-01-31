@@ -36,11 +36,35 @@ module Api
           render json: {status: 'Failed', message: 'didnt create item', data:@scanned_out_item.errors},status: :unprocessable_entity
         end
       end
+      
+      def process_scan_out
+        item = Item.find_by_barcode_id(params[:barcode])
+        if item
+          item.count = item.count - 1
+          if item.update_attributes(item_update)
+            scanned_out_record = ScannedOut.create(count: 1, item_id: item.id)
+            if scanned_out_record.save
+              render json: {status: 'SUCCESS', message: 'Saved New scanned out Item', data:item},status: :ok
+            else
+              render json: {status: 'ERROR', message: 'nice try kid', data:item},status: :unprocessable_entity
+            end
+          else
+            render json: {status: 'ERROR', message: 'not Updated scanned out item', data:item},status: :unprocessable_entity
+          end
+        else
+          render json: {status: 'ERROR', message: 'Item Not Found In DB', data:item.errors},status: :unprocessable_entity
+        end
+      end
 
+      
       private
 
       def scanned_out_item_params
         params.permit(:count, :name, :item_id, :category_id)
+      end
+
+      def item_update
+        params.permit(:barcode_id)
       end
 
     end

@@ -13,6 +13,8 @@ Rails.application.routes.draw do
       post "/category_items", to: "items#items_by_category"
       post "/search_field_item", to: "items#item_by_name"
       post "/scanned_out_by_category", to: "scanned_outs#items_by_category"
+      post "/scan_in", to: "scanned_ins#process_scan_in"
+      post "/scan_out", to: "scanned_outs#process_scan_out"
 
     end
   end
