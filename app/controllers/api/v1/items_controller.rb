@@ -4,6 +4,22 @@ module Api
 
       skip_before_action :require_login
 
+      def filter_items
+        sortedItemByCategory = Hash.new
+        items = Item.all
+        items.each do |item|
+          unless sortedItemByCategory[item.category_id].present?
+            sortedItemByCategory[item.category_id] = Array.new
+          end
+          sortedItemByCategory[item.category_id].push(item)
+        end
+        categories = Category.all
+        categories.each do |category|
+          sortedItemByCategory[category.name] = sortedItemByCategory.delete(category.id)
+        end
+        render json: {status: 'SUCCESS', message: 'got items', data:sortedItemByCategory},status: :ok
+      end
+
       def items_by_category
         @items = Item.where(category_id: params[:category_id])
         render json: {status: 'SUCCESS', message: 'got items', data:@items},status: :ok

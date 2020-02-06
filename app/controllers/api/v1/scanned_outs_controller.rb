@@ -4,6 +4,7 @@ module Api
 
       skip_before_action :require_login
 
+      #trend report logic
       def items_by_category
         scanned_out_sorted = Hash.new
         scanned_out_items = ScannedOut.includes(:item).where(items: {category_id: params[:category_id]}, scanned_outs: {created_at: params[:start_date]..params[:end_date]})
