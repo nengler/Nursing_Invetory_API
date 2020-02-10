@@ -6,6 +6,19 @@ module Api
 
       def grab_last_5
         last_5_scanned_in = ScannedIn.last_created
+        ar = []
+        last_5_scanned_in.each do |item|
+          ar.push(item.item_id)
+        end
+        corresponding_items = Item.includes(:scanned_in).where(items: {id: ar})
+        last_5_scanned_in.each do |scanned_in|
+          corresponding_items.each do |item|
+            if(scanned_in.item_id == item.id)
+              scanned_in.name = item.name
+              scanned_in.description = item.description
+            end
+          end
+        end
         render json: {status: 'SUCCESS', message: '5 items got', data:last_5_scanned_in},status: :ok
       end
 

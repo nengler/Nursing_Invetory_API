@@ -47,9 +47,7 @@ module Api
         if @item.save
           render json: {status: 'SUCCESS', message: 'item saved', data:@item},status: :ok
         else
-          @categories = Category.all
-          @response = {:categories => @categories, :errors => @item.errors}
-          render json: {status: 'Failed', message: 'didnt create item', data:@response},status: :unprocessable_entity
+          render json: {status: 'Failed', message: 'didnt create item', data:@item.errors},status: :bad_request
         end
       end
 
@@ -82,7 +80,7 @@ module Api
       private
 
       def item_params
-        params.require(:item).permit(:name, :description, :count, :barcode_id, :category_id)
+        params.require(:item).permit(:name, :description, :count, :barcode, :category_id)
       end
 
     end
