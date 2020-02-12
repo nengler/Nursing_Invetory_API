@@ -39,7 +39,7 @@ module Api
       end
       
       def process_scan_out
-        item = Item.find_by_barcode_id(params[:barcode])
+        item = Item.find_by_barcode(params[:barcode])
         if item
           item.count = item.count - 1
           if item.update_attributes(item_update)

@@ -23,7 +23,7 @@ module Api
       end
 
       def process_scan_in
-        item = Item.find_by_barcode_id(params[:barcode])
+        item = Item.find_by_barcode(params[:barcode])
         if item
           item.count = item.count + 1
           if item.update_attributes(item_update)
@@ -31,13 +31,13 @@ module Api
             if scanned_in_record.save
               render json: {status: 'SUCCESS', message: 'Saved New scanned in Item', data:item},status: :ok
             else
-              render json: {status: 'ERROR', message: 'nice try kid', data:item},status: :unprocessable_entity
+              render json: {status: 'ERROR', message: 'nice try kid', data:item},status: :ok
             end
           else
-            render json: {status: 'ERROR', message: 'not Updated scanned in item', data:item},status: :unprocessable_entity
+            render json: {status: 'ERROR', message: 'not Updated scanned in item', data:item},status: :ok
           end
         else
-          render json: {status: 'ERROR', message: 'Item Not Found In DB', data:"item not found"},status: :unprocessable_entity
+          render json: {status: 'ERROR', message: 'Item Not Found In DB', data:"item not found"},status: :ok
         end
       end
 
