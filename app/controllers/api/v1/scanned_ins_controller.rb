@@ -6,11 +6,11 @@ module Api
 
       def grab_last_5
         last_5_scanned_in = ScannedIn.last_created
-        ar = []
+        last_5_item_ids = []
         last_5_scanned_in.each do |item|
-          ar.push(item.item_id)
+          last_5_item_ids.push(item.item_id)
         end
-        corresponding_items = Item.includes(:scanned_in).where(items: {id: ar})
+        corresponding_items = Item.includes(:scanned_in).where(items: {id: last_5_item_ids})
         last_5_scanned_in.each do |scanned_in|
           corresponding_items.each do |item|
             if(scanned_in.item_id == item.id)

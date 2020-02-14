@@ -4,6 +4,24 @@ module Api
 
       skip_before_action :require_login
 
+      def items_below_threshold
+        sortedBelowThresholdItems = Hash.new
+        below_threshold_items = Item.where('count < threshold');
+        below_threshold_items.each do |item|
+          unless sortedBelowThresholdItems[item.category_id].present?
+            sortedBelowThresholdItems[item.category_id] = Array.new
+          end
+          sortedBelowThresholdItems[item.category_id].push(item)
+        end
+        categories = Category.all
+        categories.each do |category|
+          if sortedBelowThresholdItems[category.id].present?
+            sortedBelowThresholdItems[category.name] = sortedBelowThresholdItems.delete(category.id)
+          end
+        end
+        render json: {status: 'SUCCESS', message: 'got items', data:sortedBelowThresholdItems},status: :ok
+      end
+
       def filter_items
         sortedItemByCategory = Hash.new
         items = Item.all

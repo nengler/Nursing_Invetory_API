@@ -4,6 +4,7 @@ class CreateItems < ActiveRecord::Migration[6.0]
       t.string :name
       t.string :description
       t.integer :count
+      t.integer :threshold
       t.string :barcode
       t.references :category
 

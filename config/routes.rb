@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       post "/scan_in", to: "scanned_ins#process_scan_in"
       post "/scan_out", to: "scanned_outs#process_scan_out"
       get "/report_page", to: "items#filter_items"
+      get "/threshold_items", to: "items#items_below_threshold"
     end
   end
 end
