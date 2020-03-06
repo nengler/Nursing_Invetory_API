@@ -24,10 +24,11 @@ module Api
 
       def process_scan_in
         item = Item.find_by_barcode(params[:barcode])
+        count = params[:count].to_i
         if item
-          item.count = item.count + 1
+          item.count = item.count + count
           if item.update_attributes(item_update)
-            scanned_in_record = ScannedIn.create(count: 1, item_id: item.id)
+            scanned_in_record = ScannedIn.create(count: count, item_id: item.id)
             if scanned_in_record.save
               render json: {status: 'SUCCESS', message: 'Saved New scanned in Item', data:item},status: :ok
             else

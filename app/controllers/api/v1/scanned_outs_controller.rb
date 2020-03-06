@@ -6,21 +6,36 @@ module Api
 
       #trend report logic
       def items_by_category
+        puts(params)
         scanned_out_sorted = Hash.new
-        scanned_out_items = ScannedOut.includes(:item).where(items: {category_id: params[:category_id]}, scanned_outs: {created_at: params[:start_date]..params[:end_date]})
-        scanned_out_items.each do |item|
-          if scanned_out_sorted[item.item_id].present?
-            scanned_out_sorted[item.item_id].count += item.count
-            if item.updated_at > scanned_out_sorted[item.item_id].updated_at
-              scanned_out_sorted[item.item_id].updated_at = item.updated_at
+        scanned_out_sorted_by_category = Hash.new
+        scanned_out_items = ScannedOut.includes(:item).where(scanned_outs: {created_at: params[:start_date]..params[:end_date]})
+        scanned_out_items.each do |sc_item|
+          if scanned_out_sorted[sc_item.item_id].present?
+            scanned_out_sorted[sc_item.item_id].count += sc_item.count
+            if sc_item.updated_at > scanned_out_sorted[sc_item.item_id].updated_at
+              scanned_out_sorted[sc_item.item_id].updated_at = sc_item.updated_at
             end
           else
-            item.name = item.item.name
-            item.description = item.item.description
-            scanned_out_sorted[item.item_id] = item
+            sc_item.name = sc_item.item.name
+            sc_item.description = sc_item.item.description
+            sc_item.category_id = sc_item.item.category_id
+            scanned_out_sorted[sc_item.item_id] = sc_item
           end
         end
-        render json: {status: 'SUCCESS', message: 'got items', data:scanned_out_sorted},status: :ok
+
+        scanned_out_sorted.each_value {|sc_value| 
+          unless scanned_out_sorted_by_category[sc_value.category_id].present?
+            scanned_out_sorted_by_category[sc_value.category_id] = Array.new
+          end
+          scanned_out_sorted_by_category[sc_value.category_id].push(sc_value)
+          }
+
+        categories = Category.all
+        categories.each do |category|
+          scanned_out_sorted_by_category[category.name] = scanned_out_sorted_by_category.delete(category.id.to_s)
+        end
+        render json: {status: 'SUCCESS', message: 'got items', data:scanned_out_sorted_by_category},status: :ok
       end
 
       def index
@@ -40,10 +55,11 @@ module Api
       
       def process_scan_out
         item = Item.find_by_barcode(params[:barcode])
+        count = params[:count].to_i
         if item
-          item.count = item.count - 1
+          item.count = item.count - count
           if item.update_attributes(item_update)
-            scanned_out_record = ScannedOut.create(count: 1, item_id: item.id)
+            scanned_out_record = ScannedOut.create(count: count, item_id: item.id)
             if scanned_out_record.save
               render json: {status: 'SUCCESS', message: 'Saved New scanned out Item', data:item},status: :ok
             else
