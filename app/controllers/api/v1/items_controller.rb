@@ -81,18 +81,23 @@ module Api
 
       def update
         @item = Item.find(params[:id])
-        if @item.update_attributes(item_params)
-          render json: {status: 'SUCCESS', message: 'item updated', data:@item},status: :ok
+        namee =  params.require(:item).permit(:name)
+        check_for_duplicate_names = Item.where(name: namee[:name]).first
+        if(check_for_duplicate_names == nil || @item.id == check_for_duplicate_names.id)
+          if @item.update(item_params)
+            render json: {status: 'SUCCESS', message: 'item updated', data:@item},status: :ok
+          else
+            render json: {status: 'Failed', message: 'didnt update item', data:@item},status: :ok
+          end
         else
-          render json: {status: 'Failed', message: 'didnt update item', data:@item},status: :unprocessable_entity
+          render json: {status: 'SUCCESS', message: 'item updated', error:"duplicate entry"},status: :unprocessable_entity
         end
       end
 
       def destroy
         @item = Item.find(params[:id])
         @item.destroy
-        render json: {status: 'SUCCESS', message: 'item deleeted', data:@item},status: :ok
-
+        render json: {status: 'SUCCESS', message: 'item deleted', data:@item},status: :ok
       end
 
       private
