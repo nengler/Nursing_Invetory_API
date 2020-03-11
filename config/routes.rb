@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :items
       resources :scanned_outs
       get "/get_last_five", to: "scanned_ins#grab_last_5"
+      get "/get_last_five_scanned_out", to: "scanned_outs#grab_last_5"
       post "/login", to: "auth#login"
       #get "/auto_login", to: "auth#auto_login"
       get "/user_is_authed", to: "auth#user_is_authed"

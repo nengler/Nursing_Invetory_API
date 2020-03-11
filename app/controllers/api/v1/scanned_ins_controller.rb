@@ -19,7 +19,7 @@ module Api
             end
           end
         end
-        render json: {status: 'SUCCESS', message: '5 items got', data:last_5_scanned_in},status: :ok
+        render json: {status: 'SUCCESS', message: '5 items got', data:last_5_scanned_in.reverse},status: :ok
       end
 
       def process_scan_in

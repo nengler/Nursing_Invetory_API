@@ -38,6 +38,25 @@ module Api
         render json: {status: 'SUCCESS', message: 'got items', data:scanned_out_sorted_by_category},status: :ok
       end
 
+      #last 5 scanned out
+      def grab_last_5
+        last_5_scanned_out = ScannedOut.last_created
+        last_5_item_ids = []
+        last_5_scanned_out.each do |item|
+          last_5_item_ids.push(item.item_id)
+        end
+        corresponding_items = Item.includes(:scanned_out).where(items: {id: last_5_item_ids})
+        last_5_scanned_out.each do |scanned_out|
+          corresponding_items.each do |item|
+            if(scanned_out.item_id == item.id)
+              scanned_out.name = item.name
+              scanned_out.description = item.description
+            end
+          end
+        end
+        render json: {status: 'SUCCESS', message: '5 items got', data:last_5_scanned_out.reverse},status: :ok
+      end
+
       def index
         scanned_out_items = ScannedOut.all
         render json: {status: 'SUCCESS', message: 'got items', data:scanned_out_items},status: :ok
