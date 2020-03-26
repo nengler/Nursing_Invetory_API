@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       get "/threshold_items", to: "items#items_below_threshold"
       delete "/delete_item", to: "items#destroy"
       patch "/update_item", to: "items#update"
+      post "/details", to: "items#show"
     end
   end
 end

@@ -70,7 +70,7 @@ module Api
       end
 
       def show
-        @item = Item.find(params[:id])
+        @item = Item.find_by_barcode(params[:barcode])
         render json: {status: 'SUCCESS', message: 'item found', data:@item},status: :ok
       end
 
