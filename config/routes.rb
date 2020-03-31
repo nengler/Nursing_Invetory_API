@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       delete "/delete_item", to: "items#destroy"
       patch "/update_item", to: "items#update"
       post "/details", to: "items#show"
+      get "/get_all_items", to: "items#index"
     end
   end
 end

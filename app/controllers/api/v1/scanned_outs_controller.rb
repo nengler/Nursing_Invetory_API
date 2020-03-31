@@ -6,7 +6,6 @@ module Api
 
       #trend report logic
       def items_by_category
-        puts(params)
         scanned_out_sorted = Hash.new
         scanned_out_sorted_by_category = Hash.new
         scanned_out_items = ScannedOut.includes(:item).where(scanned_outs: {created_at: params[:start_date]..params[:end_date]})
@@ -82,13 +81,13 @@ module Api
             if scanned_out_record.save
               render json: {status: 'SUCCESS', message: 'Saved New scanned out Item', data:item},status: :ok
             else
-              render json: {status: 'ERROR', message: 'nice try kid', data:item},status: :unprocessable_entity
+              render json: {status: 'ERROR', message: 'nice try kid', data:item},status: :ok
             end
           else
-            render json: {status: 'ERROR', message: 'not Updated scanned out item', data:item},status: :unprocessable_entity
+            render json: {status: 'ERROR', message: 'not Updated scanned out item', data:item},status: :ok
           end
         else
-          render json: {status: 'ERROR', message: 'Item Not Found In DB', data:item.errors},status: :unprocessable_entity
+          render json: {status: 'ERROR', message: 'Item Not Found In DB', data:item.errors},status: :ok
         end
       end
 

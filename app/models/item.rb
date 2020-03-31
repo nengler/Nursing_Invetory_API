@@ -3,6 +3,9 @@ class Item < ApplicationRecord
   has_many :scanned_in, dependent: :destroy
   has_many :scanned_out, dependent: :destroy
 
+  
+  attribute :category_name, :string
+
   validates :name, presence: true 
   validates_uniqueness_of :barcode, case_sensitive: true
   validates :count, numericality: { greater_than_or_equal_to: 0 }

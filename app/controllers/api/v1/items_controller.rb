@@ -49,8 +49,12 @@ module Api
       end
 
       def index
-        @items = Item.all
-        render json: {status: 'SUCCESS', message: 'got items', data:@items},status: :ok
+        items = Item.includes(:category)
+        items.each do |item|
+          puts(item.category.name)
+          item.category_name = item.category.name
+        end
+        render json: {status: 'SUCCESS', message: 'got items', data:items},status: :ok
       end
       
       def new
