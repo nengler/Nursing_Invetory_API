@@ -74,8 +74,12 @@ module Api
       end
 
       def show
-        @item = Item.find_by_barcode(params[:barcode])
-        render json: {status: 'SUCCESS', message: 'item found', data:@item},status: :ok
+        item = Item.find_by_barcode(params[:barcode])
+        if item
+          render json: {status: 'SUCCESS', message: 'item found', data:item},status: :ok
+        else
+          render json: {status: 'ERROR', message: 'Item Not Found In DB', data:"item not found"},status: :ok
+        end
       end
 
       def edit
