@@ -87,7 +87,7 @@ module Api
             render json: {status: 'ERROR', message: 'not Updated scanned out item', data:item},status: :ok
           end
         else
-          render json: {status: 'ERROR', message: 'Item Not Found In DB', data:item.errors},status: :ok
+          render json: {status: 'ERROR', message: 'Item Not Found In DB', data:"item not found"},status: :ok
         end
       end
 
