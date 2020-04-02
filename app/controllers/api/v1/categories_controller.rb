@@ -35,20 +35,23 @@ module Api
       end
 
       def update
-        @category = Category.find(params[:id])
-        if @category.update_attributes(category_params)
-          render json: {status: 'SUCCESS', message: 'updated category', data:@category},status: :ok
-        else
-          render('edit')
-          render json: {status: 'Failed', message: 'didnt update category', data:@category.errors.full_messages},status: :unprocessable_entity
+        namee =  params.require(:category).permit(:name, :old_name)
+        category = Category.find_by_name(namee[:old_name])
+        check_for_duplicate_names = Category.where(name: namee[:name]).first
+        if(check_for_duplicate_names == nil || category.id == check_for_duplicate_names.id)
+          if category.update(category_params)
+            render json: {status: 'SUCCESS', message: 'updated category', data:category},status: :ok
+          else
+            render('edit')
+            render json: {status: 'Failed', message: 'didnt update category', data:category.errors.full_messages},status: :unprocessable_entity
+          end
         end
       end
 
       def destroy
-        @category = Category.find(params[:id])
-        @category.destroy
-        render json: {status: 'SUCCESS', message: 'deleted category', data:@category},status: :ok
-
+        category = Category.find_by_name(params[:name])
+        category.destroy
+        render json: {status: 'SUCCESS', message: 'deleted category', data:category},status: :ok
       end
 
       private
