@@ -51,7 +51,6 @@ module Api
       def index
         items = Item.includes(:category)
         items.each do |item|
-          puts(item.category.name)
           item.category_name = item.category.name
         end
         render json: {status: 'SUCCESS', message: 'got items', data:items},status: :ok
@@ -69,7 +68,7 @@ module Api
         if @item.save
           render json: {status: 'SUCCESS', message: 'item saved', data:@item},status: :ok
         else
-          render json: {status: 'Failed', message: 'didnt create item', data:@item.errors},status: :bad_request
+          render json: {status: 'Failed', message: 'didnt create item', data:@item.errors},status: :ok
         end
       end
 

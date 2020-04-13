@@ -40,12 +40,17 @@ module Api
         check_for_duplicate_names = Category.where(name: namee[:name]).first
         if(check_for_duplicate_names == nil || category.id == check_for_duplicate_names.id)
           if category.update(category_params)
+            puts("init")
             render json: {status: 'SUCCESS', message: 'updated category', data:category},status: :ok
           else
-            render('edit')
+            puts("not init")
             render json: {status: 'Failed', message: 'didnt update category', data:category.errors.full_messages},status: :unprocessable_entity
           end
+          puts("oh no")
+          render json: {status: "Failed", message: "category already exists", data: "category already exists"},status: :unprocessable_entity
         end
+        puts("oh no")
+        render json: {status: "Failed", message: "category already exists", data: "category already exists 2"},status: :unprocessable_entity
       end
 
       def destroy

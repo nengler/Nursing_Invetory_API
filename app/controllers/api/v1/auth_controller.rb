@@ -9,9 +9,9 @@ module Api
         if user && user.authenticate(params[:password])
           payload = {user_id: user.id}
           token = encode_token(payload)
-          render json: {user: user, jwt: token, success: "Welcome back"}
+          render json: {user: user, jwt: token, success: "Welcome back"}, status: :ok
         else
-          render json: {failure: "log in failed! invalid username password combo"}
+          render json: {failure: "log in failed! invalid username password combo"}, status: :unauthorized
         end
       end
 
