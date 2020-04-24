@@ -46,11 +46,10 @@ module Api
             puts("not init")
             render json: {status: 'Failed', message: 'didnt update category', data:category.errors.full_messages},status: :unprocessable_entity
           end
+        else
           puts("oh no")
           render json: {status: "Failed", message: "category already exists", data: "category already exists"},status: :unprocessable_entity
         end
-        puts("oh no")
-        render json: {status: "Failed", message: "category already exists", data: "category already exists 2"},status: :unprocessable_entity
       end
 
       def destroy

@@ -38,11 +38,6 @@ module Api
         render json: {status: 'SUCCESS', message: 'got items', data:sortedItemByCategory},status: :ok
       end
 
-      def items_by_category
-        @items = Item.where(category_id: params[:category_id])
-        render json: {status: 'SUCCESS', message: 'got items', data:@items},status: :ok
-      end
-
       def item_by_name
         @item = Item.where("name like ?", "%#{params[:name]}%")
         render json: {status: 'SUCCESS', message: 'got item(s)', data:@item},status: :ok

@@ -22,14 +22,12 @@ module Api
             scanned_out_sorted[sc_item.item_id] = sc_item
           end
         end
-
         scanned_out_sorted.each_value {|sc_value| 
           unless scanned_out_sorted_by_category[sc_value.category_id].present?
             scanned_out_sorted_by_category[sc_value.category_id] = Array.new
           end
           scanned_out_sorted_by_category[sc_value.category_id].push(sc_value)
           }
-
         categories = Category.all
         categories.each do |category|
           scanned_out_sorted_by_category[category.name] = scanned_out_sorted_by_category.delete(category.id.to_s)
